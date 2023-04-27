@@ -1,6 +1,0 @@
-{% autoescape off %}
-
-    <p>Добрый день {{ user.first_name }}, нажмите на сслыку, чтобы подтвердить вашу регистрацию на сайте {{ domain }}</p>
-
-    <a href="http://{{ domain }}{% url 'activate' uid=uid token=token %}"></a>
-{% endautoescape %}
