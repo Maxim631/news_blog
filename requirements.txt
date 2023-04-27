@@ -1,0 +1,5 @@
+Django == 4.2
+Pillow == 9.5.0
+django-filter == 23.1
+humanize == 4.6.0
+djangorestframework == 3.14

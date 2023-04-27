@@ -1,0 +1,45 @@
+.wrapper{
+    border: 1px solid #2aabd2;
+    width: 100%;
+    max-width: 900px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 30px;
+    background: #c0ccc2;
+
+
+
+}
+
+.box {
+   position: relative;
+   overflow:hidden;
+   width:800px;
+   height:300px;
+}
+
+.box img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 300px;
+    object-fit: cover;
+}
+
+body {
+    background: #e9f5ec url(static/images/background.png); /* Цвет фона и путь к файлу */
+    color: #040805; /* Цвет текста */
+   }
+
+.comment{
+    border: 2px solid #2aabd2;
+    width: 90%;
+    max-width: 500px;
+    margin-left: 7%;
+    padding: 25px;
+    border-radius: 30px;
+    background: #eef5d0;
+
+}
