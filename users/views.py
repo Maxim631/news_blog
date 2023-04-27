@@ -1,11 +1,13 @@
 from django.core.mail import send_mail
 
 from django.contrib.auth.tokens import default_token_generator
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.views import View
 from .models import User
-from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 from .forms import UserRegistrationForm, UserEditForm
 
 
@@ -44,7 +46,7 @@ class Register(View):
         else:
             return render(request, 'registration/register.html', {'form': form})
 
-
+@method_decorator(login_required, name='dispatch')
 class EditUser(View):
     def get(self, request):
         form = UserEditForm(instance=request.user)
@@ -54,7 +56,7 @@ class EditUser(View):
         form = UserEditForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('/profile')
+            return redirect(f'/profile/{request.user.id}')
         return render(request, 'registration/settings.html', {'form': form})
 
 

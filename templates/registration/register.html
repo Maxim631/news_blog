@@ -4,13 +4,11 @@
 Регистрация
 {% endblock %}
 {% block content %}
-
-
     <form method="post" action="{% url 'register' %}">
-    {% csrf_token %}
-    <table>{{ form.as_p }}</table>
-    <button name="submit">Регистрация</button>
-    <input type="hidden" name="next" value="{% url 'main' %}">
+        {% csrf_token %}
+        <table>{{ form.as_p }}</table>
+        <button class="btn btn-success" name="submit">Регистрация</button>
+        <input type="hidden" class="btn btn-primary" name="next" value="{% url 'main' %}">
     </form>
 
 

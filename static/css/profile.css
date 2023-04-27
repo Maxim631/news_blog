@@ -1,0 +1,25 @@
+.round {
+    width: 800px;
+    height: 300px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 10px;
+    background-image: url(https://bogatyr.club/uploads/posts/2021-11/thumbs/1636932286_9-bogatyr-club-p-fon-blyur-9.jpg);
+}
+
+
+h2{
+
+}
+
+
+
+
+.round img{
+    border-radius: 100px;
+    width: 200px; height: 200px;
+    object-fit: cover;
+    float: left;
+    /*padding: 0 20px 20px 0;*/
+
+}

@@ -7,20 +7,17 @@
 {% block title %} Новости {% endblock %}
 
 {% block content %}
-
-
        {% for news in all_news %}
        <article class="media content-section" >
-{#        <img class="rounded-circle article-img" src="{{ news.source.user_picture.url }}">#}
-          <div class="wrapper">
-            <div class="article-metadata" style="text-align: right;">
-              <a class="mr-2" href="{% url "profile" user.id %}">{{ news.author.first_name }}
+       <a  href="{% url "news-detail" news.id %}">
+          <div class="wrapper" >
+            <div class="article-metadata" style="text-align: left;">
+              <a class="mr-2" href="{% url "profile" news.author.id %}">{{ news.author.first_name }}
                 {{ news.author.last_name }}</a>
               <small class="text-muted">{{ news.date_publication | naturaltime }}</small>
             </div>
-            <h1><a class="article-title" style="color: #eb9316; font-family:Arial" href="{% url "news-detail" news.id %}">{{ news.title }}</a></h1>
-
-            <p class="article-content" style="font-family: Calibri">
+            <h1><a class="article-title" href="{% url "news-detail" news.id %}">{{ news.title }}</a></h1>
+            <p class="article-content" >
                 {{ news.text }}
                 {% if news.image != '' %}
                     <div class="box">
@@ -29,37 +26,13 @@
                 {% endif %}
             </p>
           </div>
-        </article>
-        <br>
+       </a>
+       </article>
+           <br>
        {% endfor %}
-
 {% endblock content %}
 
 
-
-
-
-
-
-
-
-img class="rounded-circle article-img" src="{{ news.source.user_picture.url }}">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="{% url 'profile' news.author.id %}">{{ news.author.first_name }}
-                {{ news.author.last_name }}</a>
-              <small class="text-muted">{{ news.date_publication | naturaltime }}</small>
-            </div>
-            <h2><a class="blog-post-title mb-1" href="{% url "news-detail" news.id %}">{{ news.title }}</a></h2>
-
-            <p class="article-content">
-                {{ news.text | linebreaks }}
-                {% if news.image != '' %}
-                    <img src="{{ news.image.url }}" style="width:100px; max-height:100px">
-                {% endif %}
-            </p>
-          </div>
-        </article>
 
 
 

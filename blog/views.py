@@ -5,6 +5,8 @@ from .models import News, Comments
 from django.views import View
 from .forms import NewsForm, CommentForm
 from .filters import NewsFilter
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 class NewsView(View):
@@ -19,7 +21,7 @@ class NewsView(View):
             }
         )
 
-
+@method_decorator(login_required, name='dispatch')
 class CheckNews(View):
     def get(self, request):
         return render(
@@ -28,7 +30,7 @@ class CheckNews(View):
             {"news_valid": News.objects.filter(in_processing=True)}
         )
 
-
+@method_decorator(login_required, name='dispatch')
 class ConfirmationNews(View):
     def post(self, request, news_id):
         in_processing = request.POST.get('in_processing')
@@ -47,7 +49,7 @@ class CategoryNewsView(View):
             }
         )
 
-
+@method_decorator(login_required, name='dispatch')
 class Profile(View):
     def get(self, request, user_id):
         user = users.models.User.objects.get(id=user_id)
@@ -61,7 +63,7 @@ class Profile(View):
             }
         )
 
-
+@method_decorator(login_required, name='dispatch')
 class CreateNews(View):
     def get(self, request):
         form = NewsForm
@@ -77,7 +79,7 @@ class CreateNews(View):
             return redirect('/')
         return render(request, 'create_news.html', {'form': form})
 
-
+@method_decorator(login_required, name='dispatch')
 class EditNews(View):
     def get(self, request, news_id):
         news = get_object_or_404(News, id=news_id)
@@ -92,7 +94,7 @@ class EditNews(View):
             return redirect('/')
         return render(request, 'edit_news.html', {'form': form})
 
-
+@method_decorator(login_required, name='dispatch')
 class DeleteNews(View):
     def post(self, request, news_id: int):
         News.objects.filter(id=news_id).delete()
@@ -109,7 +111,7 @@ class NewsDetail(View):
                                                  'comments_news': comments_news,
                                                  })
 
-
+@method_decorator(login_required, name='dispatch')
 class NewComment(View):
     def post(self, request, news_id):
         comment_form = CommentForm(request.POST)
@@ -122,7 +124,7 @@ class NewComment(View):
             new_comment.save()
             return redirect(f'/news/{news.id}')
 
-
+@method_decorator(login_required, name='dispatch')
 class DeleteComment(View):
     def post(self, request, comment_id):
         comment = get_object_or_404(Comments, id=comment_id)

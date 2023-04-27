@@ -11,49 +11,47 @@
 {% block content %}
 <article class="media content-section">
 {#        <img class="rounded-circle article-img" src="{{ news.source.user_picture.url }}">#}
-          <div class="wrapper">
-            <div class="article-metadata">
-              <a class="mr-2" href="{% url "news-detail" news.id %}">{{ news.author.first_name }}
+    <div class="wrapper">
+        <div class="article-metadata" style="text-align: left;">
+            <a class="mr-2" href="{% url "profile" news.author.id %}">{{ news.author.first_name }}
                 {{ news.author.last_name }}</a>
-              <small class="text-muted">{{ news.date_publication }}</small>
-            </div>
-            <h2><a class="article-title" href="{% url "news-detail" news.id%}">{{ news.title }}</a></h2>
-
-            <p class="article-content">
-                {{ news.text | linebreaks }}
-                {% if news.image != '' %}
-                    <img src="{{ news.image.url }}" style="max-height:300px">
-                {% endif %}
-            </p>
+            <small class="text-muted">{{ news.date_publication | naturaltime }}</small>
+        </div>
+        <h1><a class="article-title" href="{% url "news-detail" news.id %}">{{ news.title }}</a></h1>
+        <p class="article-content">
+            {{ news.text | linebreaks }}
+            {% if news.image != '' %}
+                <img src="{{ news.image.url }}" style="max-height:300px">
+            {% endif %}
+        </p>
     </div>
     <br>
     <div class="comment">
         {% for comment in comments_news %}
-                <h3>{{ comment.comment | linebreaks }}</h3>
-                <p class=".bg-blue">
-                    {{ comment.commentator.username }}
-                    {{ comment.date_comment | naturaltime }}
-                    {% if comment.commentator == request.user %}
-                    <form method="post" action="{% url "delete-comment" comment.id %}">
-                     {% csrf_token %}
-                     <button type="submit" class="badge text-bg-danger">Удалить</button>
-                 </form>
+            <div style="text-align: right">
+                <form method="post" action="{% url "delete-comment" comment.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="badge text-bg-danger">Удалить</button>
+                </form>
+            </div>
+            <h4>{{ comment.comment | linebreaks }}</h4>
+            <p  style="font-weight: 100; font-size: 90%; font-family: Calibri">
+                <a style="color: black" href="{% url 'profile' comment.commentator.id %}">{{ comment.commentator.username }}</a>
+                <br>
+                {{ comment.date_comment | naturaltime }}
+                {% if comment.commentator == request.user %}
                 {% endif %}
-                </p>
+            </p>
             <hr>
-           {% endfor %}
-            {% if user.is_authenticated %}
-                <h2>Добавить комментарий</h2>
-                 <form method="post"  action="{% url 'comment' news.id %}">
-                     {% csrf_token %}
-                    {{ form }}
-
-                    <p><input type="submit" class="badge text-bg-primary" value="Добавить"></p>
-                 </form>
-            {% endif %}
-          </div>
-
-        </article>
-
-
+        {% endfor %}
+        {% if user.is_authenticated %}
+            <h2>Добавить комментарий</h2>
+            <form method="post"  action="{% url 'comment' news.id %}">
+                {% csrf_token %}
+                {{ form }}
+                <p><input type="submit" class="badge text-bg-primary" value="Добавить"></p>
+            </form>
+        {% endif %}
+    </div>
+</article>
 {% endblock %}

@@ -1,15 +1,28 @@
 .wrapper{
-    border: 1px solid #2aabd2;
     width: 100%;
     max-width: 900px;
     margin: auto;
     padding: 25px;
     border-radius: 30px;
-    background: #c0ccc2;
-
-
+    background: #ffffff;
+    /*style="color: #eb9316; font-family:Arial*/
+    /*style="font-family: Calibri"*/
 
 }
+h1{
+    font-family: "Franklin Gothic Heavy";
+
+}
+
+a{
+    color: #7aa108;
+    text-decoration: none;
+}
+p{
+    font-family: "Franklin Gothic Medium";
+    font-size: 120%;
+}
+
 
 .box {
    position: relative;
@@ -28,18 +41,12 @@
     object-fit: cover;
 }
 
-body {
-    background: #e9f5ec url(static/images/background.png); /* Цвет фона и путь к файлу */
-    color: #040805; /* Цвет текста */
-   }
-
 .comment{
-    border: 2px solid #2aabd2;
     width: 90%;
     max-width: 500px;
     margin-left: 7%;
     padding: 25px;
-    border-radius: 30px;
-    background: #eef5d0;
+    border-radius: px;
+    background: #fcfcfc;
 
 }
