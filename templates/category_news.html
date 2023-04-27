@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% block link %}
+    <link href="{% static 'css/news.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+    {% for news in category_news %}
+        <article class="media content-section" >
+        <div class="wrapper">
+
+{#        <img class="rounded-circle article-img" src="{{ news.source.user_picture.url }}">#}
+
+
+            <div class="article-metadata">
+
+              <a class="mr-2" href="{% url "news-detail" news.id %}">{{ news.author.first_name }}
+                {{ news.author.last_name }}</a>
+              <small class="text-muted">{{ news.date_publication | naturaltime }}</small>
+            </div>
+            <h2><a class="article-title" href="{% url "news-detail" news.id %}">{{ news.title }}</a></h2>
+
+            <p class="article-content">
+                {{ news.text | linebreaks }}
+                {% if news.image != '' %}
+                    <div class="box">
+                    <img src="{{ news.image.url }}">
+                    </div>
+                {% endif %}
+            </p>
+          </div>
+        </article>
+        <hr style="color: red">
+    {% endfor %}
+{% endblock content %}

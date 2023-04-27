@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block content %}
+    {% for news in news_valid %}
+        <article class="blog-post">
+{#        <img class="rounded-circle article-img" src="{{ news.source.user_picture.url }}">#}
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{ news.author.first_name }}
+                {{ news.author.last_name }}</a>
+              <small class="text-muted">{{ news.date_publication | naturaltime }}</small>
+            </div>
+            <h2><a class="blog-post-title mb-1" href="{% url "news-detail" news.id %}">{{ news.title }}</a></h2>
+
+            <p class="article-content">
+                {{ news.text | linebreaks }}
+                {% if news.image != '' %}
+                    <img src="{{ news.image.url }}" style="max-height:300px">
+                {% endif %}
+            </p>
+              <div class="modal-footer">
+                  <form method="post" action="{% url "confirmation-news" news.id %}">
+                     {% csrf_token %}
+                     <button class="btn btn-success" type="submit">Подтвердить</button>
+                  </form>
+                  <form method="post" action="{% url "delete-news" news.id %}">
+                     {% csrf_token %}
+                     <button class="btn btn-danger" type="submit">Удалить</button>
+                  </form>
+              <div>
+          </div>
+        </article>
+    {% endfor %}
+{% endblock content %}
+
