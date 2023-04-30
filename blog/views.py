@@ -88,13 +88,9 @@ class CreateNews(View):
         if form.is_valid():
             create_news = form.save(commit=False)
             create_news.author = request.user
-            if request.user.is_staff == 0:
-                create_news.save(in_processing=True)
-
-            else:
-                create_news.save()
-            return redirect('/')
-
+            if create_news.author.is_staff == 0:
+                create_news.in_processing = True
+            create_news.save()
             return redirect('/')
         return render(request, 'create_news.html', {'form': form})
 

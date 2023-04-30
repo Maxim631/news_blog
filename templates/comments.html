@@ -21,7 +21,9 @@
         <p class="article-content">
             {{ news.text | linebreaks }}
             {% if news.image != '' %}
-                <img src="{{ news.image.url }}" style="max-height:300px">
+               <div class="box">
+                   <img src="{{ news.image.url }}">
+               </div>
             {% endif %}
         </p>
     </div>
