@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from datetime import timedelta, datetime
 
 import users.models
 from .models import News, Comments
@@ -31,11 +30,13 @@ class CheckNews(View):
             "check_news.html",
             {"news_valid": News.objects.filter(in_processing=True)}
         )
+
+
 @method_decorator(login_required, name='dispatch')
 class DeleteCheckNews(View):
-        def post(self, request, news_id: int):
-            News.objects.filter(id=news_id).delete()
-            return redirect("/news/check_news/")
+    def post(self, request, news_id: int):
+        News.objects.filter(id=news_id).delete()
+        return redirect("/news/check_news/")
 
 
 @method_decorator(login_required, name='dispatch')
@@ -44,9 +45,6 @@ class ConfirmationNews(View):
         in_processing = request.POST.get('in_processing')
         News.objects.filter(id=news_id).update(in_processing=False)
         return redirect("/news/check_news/")
-
-
-
 
 
 class CategoryNewsView(View):
@@ -116,8 +114,6 @@ class DeleteNews(View):
     def post(self, request, news_id: int):
         News.objects.filter(id=news_id).delete()
         return redirect(f"/profile/{request.user.id}")
-
-
 
 
 class NewsDetail(View):

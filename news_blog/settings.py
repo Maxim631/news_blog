@@ -22,9 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--&wn5g9p4j)prw#sn@!bz-amtu%*uzjvi@fy3p^gbiazjo5o6w'
-
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-secret-key')
+# 'django-insecure--&wn5g9p4j)prw#sn@!bz-amtu%*uzjvi@fy3p^gbiazjo5o6w'
 # SECURITY WARNING: don't run with debug turned on in production!
+
+
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -44,6 +46,8 @@ INSTALLED_APPS = [
     'blog',
     'users',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser'
 
 
 
@@ -92,7 +96,7 @@ WSGI_APPLICATION = 'news_blog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'news_blog',
+        'NAME': 'blog',
         'USER': 'user_blog',
         'PASSWORD': '15bnt4nehf',
         'HOST': '127.0.0.1',
@@ -162,9 +166,13 @@ EMAIL_HOST_PASSWORD = 'uytaumgaausrkica'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.TokenAuthentication',
-        # 'rest_framework.authentication.BasicAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ]
 }
+
+REDIS_HOST = '192.168.100.16'
+REDIS_PORT = '6379'
+
+
+CELERY_BROKER_URL = "redis://192.168.100.16:6379"
+CELERY_BACKEND_URL = CELERY_BROKER_URL
