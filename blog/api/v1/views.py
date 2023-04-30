@@ -1,4 +1,4 @@
-from .permissions import IsOwnerOrReadOnly
+from .permissions import IsOwnerOrReadOnly, IsSuperUserOrReadOnly
 from ...models import News, Comments, Category
 from .serializers import NewsSerializer, CommentsSerializer, UserSerializer
 from rest_framework import generics, permissions
@@ -8,6 +8,7 @@ from users.models import User
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [IsSuperUserOrReadOnly]
 
 
 class UserDetail(generics.RetrieveAPIView):

@@ -10,7 +10,7 @@ urlpatterns = [
     path('users/<int:pk>/', views.UserDetail.as_view()),
     path('comments/', views.CommentsList.as_view()),
     path('comments/<int:pk>/', views.CommentsDetail.as_view()),
-    path('api-auth/', include('rest_framework.urls')),
+    # path('api-auth/', include('rest_framework.urls')),
 
 ]
 

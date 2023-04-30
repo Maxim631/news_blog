@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from datetime import timedelta, datetime
 
 import users.models
 from .models import News, Comments
@@ -21,6 +22,7 @@ class NewsView(View):
             }
         )
 
+
 @method_decorator(login_required, name='dispatch')
 class CheckNews(View):
     def get(self, request):
@@ -29,29 +31,40 @@ class CheckNews(View):
             "check_news.html",
             {"news_valid": News.objects.filter(in_processing=True)}
         )
+@method_decorator(login_required, name='dispatch')
+class DeleteCheckNews(View):
+        def post(self, request, news_id: int):
+            News.objects.filter(id=news_id).delete()
+            return redirect("/news/check_news/")
+
 
 @method_decorator(login_required, name='dispatch')
 class ConfirmationNews(View):
-    def post(self, request, news_id):
+    def post(self, request, news_id: int):
         in_processing = request.POST.get('in_processing')
         News.objects.filter(id=news_id).update(in_processing=False)
         return redirect("/news/check_news/")
 
 
+
+
+
 class CategoryNewsView(View):
 
-    def get(self, request, category_id):
+    def get(self, request, category_id: int):
+        queryset = News.objects.filter(category_id=category_id)
         return render(
             request,
             'category_news.html',
             {
-                "category_news": News.objects.filter(category_id=category_id)
+                "category_news": NewsFilter(request.GET, queryset).qs
             }
         )
 
+
 @method_decorator(login_required, name='dispatch')
 class Profile(View):
-    def get(self, request, user_id):
+    def get(self, request, user_id: int):
         user = users.models.User.objects.get(id=user_id)
         queryset = News.objects.filter(author=user.id)
         return render(
@@ -62,6 +75,7 @@ class Profile(View):
                 'user': user
             }
         )
+
 
 @method_decorator(login_required, name='dispatch')
 class CreateNews(View):
@@ -74,25 +88,32 @@ class CreateNews(View):
         if form.is_valid():
             create_news = form.save(commit=False)
             create_news.author = request.user
-            create_news.in_processing = True
-            create_news.save()
+            if request.user.is_staff == 0:
+                create_news.save(in_processing=True)
+
+            else:
+                create_news.save()
+            return redirect('/')
+
             return redirect('/')
         return render(request, 'create_news.html', {'form': form})
 
+
 @method_decorator(login_required, name='dispatch')
 class EditNews(View):
-    def get(self, request, news_id):
+    def get(self, request, news_id: int):
         news = get_object_or_404(News, id=news_id)
         form = NewsForm(instance=news)
         return render(request, 'edit_news.html', {'form': form})
 
-    def post(self, request, news_id):
+    def post(self, request, news_id: int):
         news = get_object_or_404(News, id=news_id)
         form = NewsForm(request.POST, request.FILES, instance=news)
         if form.is_valid():
             form.save()
             return redirect('/')
         return render(request, 'edit_news.html', {'form': form})
+
 
 @method_decorator(login_required, name='dispatch')
 class DeleteNews(View):
@@ -101,8 +122,10 @@ class DeleteNews(View):
         return redirect(f"/profile/{request.user.id}")
 
 
+
+
 class NewsDetail(View):
-    def get(self, request, news_id):
+    def get(self, request, news_id: int):
         form = CommentForm
         news = get_object_or_404(News, id=news_id)
         comments_news = Comments.objects.filter(news=news.id, is_active=True)
@@ -111,9 +134,10 @@ class NewsDetail(View):
                                                  'comments_news': comments_news,
                                                  })
 
+
 @method_decorator(login_required, name='dispatch')
 class NewComment(View):
-    def post(self, request, news_id):
+    def post(self, request, news_id: int):
         comment_form = CommentForm(request.POST)
         news = get_object_or_404(News, id=news_id)
         new_comment = None
@@ -124,9 +148,10 @@ class NewComment(View):
             new_comment.save()
             return redirect(f'/news/{news.id}')
 
+
 @method_decorator(login_required, name='dispatch')
 class DeleteComment(View):
-    def post(self, request, comment_id):
+    def post(self, request, comment_id: int):
         comment = get_object_or_404(Comments, id=comment_id)
         comment.delete()
         return redirect(f'/news/{comment.news.id}')

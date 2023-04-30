@@ -20,6 +20,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from users import views as user_views
 
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -29,7 +31,10 @@ urlpatterns = [
     path('account/', include('django.contrib.auth.urls')),
     path('accounts/register', user_views.Register.as_view(), name='register'),
     path('accounts/settings', user_views.EditUser.as_view(), name='settings'),
-    path('activate/<uid>/<token>/', user_views.activate, name='activate')
+    path('activate/<uid>/<token>/', user_views.activate, name='activate'),
+
+    path('auth/', include('djoser.urls')),
+
 ]
 
 
