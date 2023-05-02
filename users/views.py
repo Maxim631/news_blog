@@ -11,6 +11,7 @@ from django.utils.decorators import method_decorator
 from .forms import UserRegistrationForm, UserEditForm
 
 
+
 def create_message(user) -> str:
     message = render_to_string(
         'registration/email_confirm.html',

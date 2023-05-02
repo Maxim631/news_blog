@@ -1,0 +1,5 @@
+.idea
+venv
+media
+.gitignore
+db.sqlite3

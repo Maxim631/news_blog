@@ -24,7 +24,7 @@
     <title>{% block title %} {% endblock %}</title>
 <style>
    body {
-    background: #cde1ff url(https://kartinkin.net/pics/uploads/posts/2022-08/1659551185_68-kartinkin-net-p-patterni-dlya-saita-besshovnie-krasivo-70.jpg); /* Цвет фона и путь к файлу */
+    background: #cde1ff url(https://catherineasquithgallery.com/uploads/posts/2021-02/1614522613_101-p-belo-tsvetnoi-fon-125.jpg); /* Цвет фона и путь к файлу */
     color: #040805; /* Цвет текста */
    }
   </style>
@@ -38,11 +38,13 @@
                     <input type="search" name ='s' class="form-control" value="{{ request.GET.s }}" placeholder="Поиск..." aria-label="Search">
                 </form>
                 <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-                    <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+                    <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use>
+
+                    </svg>
                 </a>
                 <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
                     <li>
-                        <a href="{% url "main" %}"  class="nav-link text-secondary">
+                        <a href="{% url "main" %}"  class="nav-link text-white">
                             <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#home"> </use>
                                 <path d="M8.5 2.687c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
                             </svg>
@@ -70,8 +72,12 @@
     <div class="px-3 py-2 border-bottom mb-3">
         {% if request.user.username %}
             <a href="{% url 'profile'  request.user.id %}" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="{{ request.user.user_picture.url }}" alt="" width="32" height="32" class="rounded-circle me-2">
-                <strong>{{ request.user.username }}</strong>
+                {% if request.user.user_picture.url != '' %}
+                    <img src="{{ request.user.user_picture.url }}" alt="" width="32" height="32" class="rounded-circle me-2">
+                {% else %}
+                    <img src="{% static 'not_user/not_user.jpg' %}" alt="" width="32" height="32" class="rounded-circle me-2">
+                {% endif %}
+                    <strong>{{ request.user.username }}</strong>
             </a>
             <ul class="dropdown-menu text-small shadow">
                 <li></li>
@@ -93,6 +99,7 @@
     <div class="row">
         <div class="col-md-8">
             {% block content %} {% endblock %}
+        {% block category %}
         </div>
         <div class="col-md-4">
             <div class="content-section">
@@ -107,8 +114,25 @@
                 </p>
             </div>
         </div>
+        {% endblock %}
     </div>
 </main>
+<div class="container">
+  <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <div class="col-md-4 d-flex align-items-center">
+      <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+        <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+      </a>
+      <span class="mb-3 mb-md-0 text-muted">© 2022 Company, Inc</span>
+    </div>
+
+    <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+      <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"></use></svg></a></li>
+      <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"></use></svg></a></li>
+      <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"></use></svg></a></li>
+    </ul>
+  </footer>
+</div>
 </body>
 </html>
 

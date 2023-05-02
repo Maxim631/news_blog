@@ -1,11 +1,13 @@
 import pathlib
 
 from django.db import models
-from django.db.models.signals import pre_delete
+
 from django.dispatch import receiver
+from django.db.models.signals import pre_delete, pre_save
 
 from users.models import User
-import datetime
+
+from django.template.defaultfilters import slugify
 
 
 
@@ -28,6 +30,7 @@ class News(models.Model):
     image = models.ImageField(upload_to="news", null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     in_processing = models.BooleanField(default=True)
+    slug = models.SlugField(max_length=100, blank=True, unique=True)
 
     class Meta:
         verbose_name_plural = 'Новости'
@@ -49,9 +52,20 @@ class Comments(models.Model):
         ordering = ('date_comment',)
 
 
-# @receiver([pre_delete], sender=News)
-# def delete_files(sender, instance: News, **kwargs):
-#     dir_ = pathlib.Path(instance.image.path).parent
-#     for file in dir_.glob("*"):
-#         file.unlink()
-#     dir_.rmdir()
+
+
+@receiver([pre_save], sender=News)
+def create_slug(sender, instance: News, **kwargs):
+    instance.slug = slugify(
+        instance.title.translate(
+            str.maketrans(
+                r"абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ",
+                r"abvgdeejzijklmnoprstufhc4ss_y_euaABVGDEEJZIJKLMNOPRSTUFHC4SS_Y_EUA",
+            )
+        )
+    )
+
+@receiver([pre_delete], sender=News)
+def delete_files(sender, instance: News, **kwargs):
+    file = pathlib.Path(instance.image.path)
+    file.unlink()

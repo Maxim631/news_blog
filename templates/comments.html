@@ -17,7 +17,7 @@
                 {{ news.author.last_name }}</a>
             <small class="text-muted">{{ news.date_publication | naturaltime }}</small>
         </div>
-        <h1><a class="article-title" href="{% url "news-detail" news.id %}">{{ news.title }}</a></h1>
+        <h1><a class="article-title" href="{% url "news-detail" news.slug %}">{{ news.title }}</a></h1>
         <p class="article-content">
             {{ news.text | linebreaks }}
             {% if news.image != '' %}
@@ -48,7 +48,7 @@
         {% endfor %}
         {% if user.is_authenticated %}
             <h2>Добавить комментарий</h2>
-            <form method="post"  action="{% url 'comment' news.id %}">
+            <form method="post"  action="{% url 'comment' news.slug %}">
                 {% csrf_token %}
                 {{ form }}
                 <p><input type="submit" class="badge text-bg-primary" value="Добавить"></p>

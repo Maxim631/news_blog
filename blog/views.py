@@ -34,23 +34,24 @@ class CheckNews(View):
 
 @method_decorator(login_required, name='dispatch')
 class DeleteCheckNews(View):
-    def post(self, request, news_id: int):
-        News.objects.filter(id=news_id).delete()
+    def post(self, request, news_slug: int):
+        News.objects.filter(slug=news_slug).delete()
         return redirect("/news/check_news/")
 
 
 @method_decorator(login_required, name='dispatch')
 class ConfirmationNews(View):
-    def post(self, request, news_id: int):
+    def post(self, request, news_slug: int):
         in_processing = request.POST.get('in_processing')
-        News.objects.filter(id=news_id).update(in_processing=False)
+        News.objects.filter(slug=news_slug).update(in_processing=False)
         return redirect("/news/check_news/")
 
 
 class CategoryNewsView(View):
-
     def get(self, request, category_id: int):
         queryset = News.objects.filter(category_id=category_id)
+        if not request.user.is_staff:
+            queryset.filter(in_processing=False)
         return render(
             request,
             'category_news.html',
@@ -86,7 +87,7 @@ class CreateNews(View):
         if form.is_valid():
             create_news = form.save(commit=False)
             create_news.author = request.user
-            if create_news.author.is_staff == 0:
+            if not request.user.is_staff:
                 create_news.in_processing = True
             create_news.save()
             return redirect('/')
@@ -95,13 +96,13 @@ class CreateNews(View):
 
 @method_decorator(login_required, name='dispatch')
 class EditNews(View):
-    def get(self, request, news_id: int):
-        news = get_object_or_404(News, id=news_id)
+    def get(self, request, news_slug: int):
+        news = get_object_or_404(News, slug=news_slug)
         form = NewsForm(instance=news)
         return render(request, 'edit_news.html', {'form': form})
 
-    def post(self, request, news_id: int):
-        news = get_object_or_404(News, id=news_id)
+    def post(self, request, news_slug: int):
+        news = get_object_or_404(News, id=news_slug)
         form = NewsForm(request.POST, request.FILES, instance=news)
         if form.is_valid():
             form.save()
@@ -111,15 +112,15 @@ class EditNews(View):
 
 @method_decorator(login_required, name='dispatch')
 class DeleteNews(View):
-    def post(self, request, news_id: int):
-        News.objects.filter(id=news_id).delete()
+    def post(self, request, news_slug: int):
+        News.objects.filter(slug=news_slug).delete()
         return redirect(f"/profile/{request.user.id}")
 
 
 class NewsDetail(View):
-    def get(self, request, news_id: int):
+    def get(self, request, news_slug: int):
         form = CommentForm
-        news = get_object_or_404(News, id=news_id)
+        news = get_object_or_404(News, slug=news_slug)
         comments_news = Comments.objects.filter(news=news.id, is_active=True)
         return render(request, 'comments.html', {'form': form,
                                                  'news': news,
@@ -129,16 +130,16 @@ class NewsDetail(View):
 
 @method_decorator(login_required, name='dispatch')
 class NewComment(View):
-    def post(self, request, news_id: int):
+    def post(self, request, news_slug: int):
         comment_form = CommentForm(request.POST)
-        news = get_object_or_404(News, id=news_id)
+        news = get_object_or_404(News, slug=news_slug)
         new_comment = None
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
             new_comment.news = news
             new_comment.commentator = request.user
             new_comment.save()
-            return redirect(f'/news/{news.id}')
+            return redirect(f'/news/{news.slug}')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -146,4 +147,4 @@ class DeleteComment(View):
     def post(self, request, comment_id: int):
         comment = get_object_or_404(Comments, id=comment_id)
         comment.delete()
-        return redirect(f'/news/{comment.news.id}')
+        return redirect(f'/news/{comment.news.slug}')

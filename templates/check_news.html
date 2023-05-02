@@ -15,7 +15,7 @@
                 {{ news.author.last_name }}</a>
               <small class="text-muted">{{ news.date_publication | naturaltime }}</small>
             </div>
-            <h1><a class="article-title" href="{% url "news-detail" news.id %}">{{ news.title }}</a></h1>
+            <h1><a class="article-title" href="{% url "news-detail" news.slug %}">{{ news.title }}</a></h1>
 
             <p class="article-content">
                 {{ news.text | linebreaks }}
@@ -26,12 +26,12 @@
                 {% endif %}
             </p>
               <div class="modal-footer">
-                  <form method="post" action="{% url "confirmation-news" news.id %}">
+                  <form method="post" action="{% url "confirmation-news" news.slug %}">
                      {% csrf_token %}
                      <button class="btn btn-success" type="submit">Подтвердить</button>
                   </form>
                   <br>
-                  <form method="post" action="{% url "delete-check-news" news.id %}">
+                  <form method="post" action="{% url "delete-check-news" news.slug %}">
                      {% csrf_token %}
                      <button class="btn btn-danger" type="submit">Удалить</button>
                   </form>

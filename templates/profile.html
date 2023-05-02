@@ -8,8 +8,13 @@
 {% block title %} Профиль {% endblock %}
 {% block content %}
     <div class="round">
+
         <p>
-            <img src="{{ user.user_picture.url }}" class="left">
+            {% if user.user_picture.url != '' %}
+                <img src="{{ user.user_picture.url }}" class="left">
+            {% else %}
+                <img src="{% static 'not_user/not_user.jpg' %}" class="left">
+            {% endif %}
         <h1 style="text-align: end; font-family: Impact; font-weight: bolder; color: #f69a00">{{ user.first_name }} {{ user.last_name }}</h1>
         <br>
         <h5 style="text-align: end; font-family: Arial; color: #0abd7e"> Зарегистрировался {{ user.date_joined | date }}</h5>
@@ -24,7 +29,7 @@
                 <div class="article-metadata" style="text-align: left;">
                     {% if user.username == request.user.username %}
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a href="{% url 'edit-news' news.id %}" class="badge text-bg-primary">Изменить</a>
+                            <a href="{% url 'edit-news' news.slug %}" class="badge text-bg-primary">Изменить</a>
                         </div>
                         </td>
                         <br>
@@ -49,7 +54,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
-                                        <form method="post" action="{% url "delete-news" news.id %}">
+                                        <form method="post" action="{% url "delete-news" news.slug %}">
                                             {% csrf_token %}
                                             <button type="submit" class="btn btn-danger">Удалить</button>
                                         </form>
@@ -60,7 +65,7 @@
                     {% endif %}
                     <small class="text-muted">{{ news.date_publication | naturaltime }}</small>
                 </div>
-                <h1><a class="article-title" href="{% url "news-detail" news.id %}">{{ news.title }}</a></h1>
+                <h1><a class="article-title" href="{% url "news-detail" news.slug %}">{{ news.title }}</a></h1>
                 <p class="article-content">
                     {{ news.text | linebreaks }}
                     {% if news.image != '' %}
