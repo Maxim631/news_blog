@@ -14,14 +14,14 @@ services:
 
   django-migrations:
     build: .
-    image: news_blog:v0.3
+    image: news_blog:v0.4
     command: migrate
     depends_on:
       - postgres-db
 
   django-create-superuser:
     build: .
-    image: news_blog:v0.3
+    image: news_blog:v0.4
     environment:
       DJANGO_SUPERUSER_EMAIL: admin@mail.ru
       DJANGO_SUPERUSER_USERNAME: admin
@@ -33,13 +33,20 @@ services:
   django-blog:
 
     build: .
-    image: news_blog:v0.3
+    image: news_blog:v0.4
 
     command: runserver 0.0.0.0:8000
 
     environment:
       DJANGO_DEBUG: 1
       DJANGO_SECRET_KEY: django-insecure--&wn5g9p4j)prw#sn@!bz-amtu%*uzjvi@fy3p^gbiazjo5o6w
+      POSTGRES_DB: blog_db
+      POSTGRES_USER: user_blog
+      POSTGRES_PASSWORD: blog
+      DJANGO_EMAIL_HOST: smtp.yandex.ru
+      DJANGO_EMAIL_PORT: 465
+      DJANGO_EMAIL_HOST_USER: maxim.ryabtsev.631@yandex.ru
+      DJANGO_EMAIL_PASSWORD: uytaumqaausrkica
 
     ports:
       - "8080:8000"
