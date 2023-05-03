@@ -65,7 +65,8 @@ def create_slug(sender, instance: News, **kwargs):
         )
     )
 
-@receiver([pre_delete], sender=News)
-def delete_files(sender, instance: News, **kwargs):
-    file = pathlib.Path(instance.image.path)
-    file.unlink()
+# @receiver([pre_delete], sender=News)
+# def delete_files(sender, instance: News, **kwargs):
+#     file = pathlib.Path(instance.image.path)
+#     if not file == "":
+#         file.unlink()

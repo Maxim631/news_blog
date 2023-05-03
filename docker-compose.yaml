@@ -1,0 +1,66 @@
+version: "3.10"
+
+services:
+  postgres-db:
+    image: postgres
+
+    environment:
+      POSTGRES_DB: blog_db
+      POSTGRES_USER: user_blog
+      POSTGRES_PASSWORD: blog
+
+    container_name: postgres-db
+
+
+  django-migrations:
+    build: .
+    image: news_blog:v0.3
+    command: migrate
+    depends_on:
+      - postgres-db
+
+  django-create-superuser:
+    build: .
+    image: news_blog:v0.3
+    environment:
+      DJANGO_SUPERUSER_EMAIL: admin@mail.ru
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_PASSWORD: admin
+    command: createsuperuser --noinput
+    depends_on:
+      - postgres-db
+
+  django-blog:
+
+    build: .
+    image: news_blog:v0.3
+
+    command: runserver 0.0.0.0:8000
+
+    environment:
+      DJANGO_DEBUG: 1
+      DJANGO_SECRET_KEY: django-insecure--&wn5g9p4j)prw#sn@!bz-amtu%*uzjvi@fy3p^gbiazjo5o6w
+
+    ports:
+      - "8080:8000"
+
+    volumes:
+      - "./static:/app/static"
+      - "./media:/app/media"
+
+    depends_on:
+      - postgres-db
+      - django-migrations
+
+
+
+
+
+
+
+
+
+
+
+
+

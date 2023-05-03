@@ -27,9 +27,9 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-secret-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', "1")
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', "*").split(',')
 
 
 # Application definition
@@ -94,9 +94,9 @@ WSGI_APPLICATION = 'news_blog.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -152,12 +152,12 @@ LOGOUT_REDIRECT_URL = "/"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_PORT = 465
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
-EMAIL_HOST_USER = 'maxim.ryabtsev.631@yandex.ru'
-EMAIL_HOST_PASSWORD = 'uytaumgaausrkica'
+# EMAIL_HOST = os.getenv('DJANGO_EMAIL_HOST')
+# EMAIL_PORT = os.getenv('DJANGO_EMAIL_PORT')
+# EMAIL_USE_TLS = False
+# EMAIL_USE_SSL = True
+# EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = "uytaumqaausrkica"
 
 
 REST_FRAMEWORK = {
@@ -166,9 +166,8 @@ REST_FRAMEWORK = {
     ]
 }
 
-REDIS_HOST = '192.168.100.16'
-REDIS_PORT = '6379'
-
-
-CELERY_BROKER_URL = "redis://192.168.100.16:6379"
-CELERY_BACKEND_URL = CELERY_BROKER_URL
+# REDIS_HOST = os.getenv('DJANGO_REDIS_HOST')
+#
+#
+# CELERY_BROKER_URL = os.getenv('DJANGO_CELERY_BROKER_URL')
+# CELERY_BACKEND_URL = CELERY_BROKER_URL

@@ -1,13 +1,15 @@
-FROM python:3.10
+FROM python:3.10-alpine
 
 WORKDIR /app
 
-COPY ./requirements.txt /app
+ENV PYTHONUNBUFFERED 1
 
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt /app
+
+RUN pip install --upgrade pip --no-cache-dir && pip install psycopg2-binary && pip install -r requirements.txt --no-cache-dir;
 
 COPY . .
 
 EXPOSE 8000
 
-ENTRYPOINT ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
+ENTRYPOINT ["python", "manage.py"]

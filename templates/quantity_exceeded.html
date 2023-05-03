@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block link %}
+<link href="{% static 'css/news.css' %}" rel="stylesheet">
+{% endblock link %}
+{% load humanize %}
+{% block content %}
+    <br style="">
+        <div class="wrapper" style="position: center">
+            <p style="text-align: center; text-align-all: center">Упс... Превышено максимальное количество не обработанных статей.</p>
+        </div>
+{% endblock %}

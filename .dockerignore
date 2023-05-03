@@ -3,3 +3,4 @@ venv
 media
 .gitignore
 db.sqlite3
+static

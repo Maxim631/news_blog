@@ -6,10 +6,9 @@ from django.dispatch import receiver
 
 
 class User(AbstractUser):
-    user_picture = models.ImageField(upload_to="user_picture",
-                                     null=True,
-                                     blank=True
-                                     )
+    user_picture = models.ImageField(upload_to="user_picture", null=True, blank=True)
+    quantity_in_process = models.IntegerField(default=0)
+
 
     class Meta:
         db_table = "user"
